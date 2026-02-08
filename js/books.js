@@ -106,7 +106,7 @@ window.READIFY_DATA = {
       "author": "Frank Herbert",
       "genre": "Sci-Fi",
       "pages": 412,
-      "cover": "./assets/covers/Dune.jpg",
+      "cover": "./assets/covers/dune.jpg",
       "synopsis": "A science fiction epic set on the desert planet Arrakis, focusing on politics, power, and the struggle for control of the spice Melange.",
       "series": {
         "prequel": null,
