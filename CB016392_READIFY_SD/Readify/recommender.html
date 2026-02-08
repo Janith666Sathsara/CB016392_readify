@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Readify | Random Book Recommender</title>
+<meta name="description" content="Pick genre and length, get a random book suggestion, and save it to your reading list.">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#8DA399">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./assets/logo_cheems.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/styles.css">
+
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header>
+  <div class="container navwrap">
+    <a class="brand" href="./index.html" aria-label="Readify Home">
+      <img src="./assets/logo_cheems.png" alt="Readify logo">
+      <span>Readify</span>
+    </a>
+
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="navlinks" id="navlinks" aria-label="Main navigation">
+      <a href="./index.html">Home</a>
+      <a href="./explorer.html">Book Explorer</a>
+      <a href="./tracker.html">Progress Tracker</a>
+      <a href="./recommender.html">Recommender</a>
+      <a href="./flow.html">Reading Flow</a>
+      <a href="./feedback.html">Feedback</a>
+</nav>
+  </div>
+</header>
+
+
+<main id="main" class="container page">
+  <section class="section">
+    <div class="card reveal" style="padding:18px">
+      <h1>Random Book Recommender</h1>
+      <p class="small">Choose a genre and length. We’ll randomly suggest a book from stored data. Save it to your personal list (localStorage).</p>
+
+      <div class="formRow" style="margin-top:10px">
+        <div>
+          <label for="rGenre">Genre</label>
+          <select id="rGenre">
+            <option value="all">All</option>
+          </select>
+        </div>
+        <div>
+          <label for="rLen">Length</label>
+          <select id="rLen">
+            <option value="all">Any</option>
+            <option value="short">Short</option>
+            <option value="medium">Medium</option>
+            <option value="long">Long</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px">
+        <button class="btn primary" id="pickBtn" type="button">Pick a book</button>
+        <button class="btn" id="againBtn" type="button">Pick again</button>
+      </div>
+
+      <div class="card" id="suggestion" style="padding:16px; margin-top:16px; background: rgba(255,255,255,.05)">
+        <div class="small">Suggestion</div>
+        <h2 id="sTitle" style="margin-top:6px">—</h2>
+        <p class="small" id="sMeta">Choose options and pick.</p>
+        <p id="sSynopsis"></p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px">
+          <button class="btn" id="saveRec" type="button">Save to reading list</button>
+          <span class="small" id="recStatus"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="card reveal" style="padding:18px">
+      <h2>Your reading list</h2>
+      <p class="small">Stored in localStorage. Remove items anytime.</p>
+      <div id="list" class="cards"></div>
+    </div>
+  </section>
+</main>
+
+
+<footer class="footer">
+  <div class="container footerGrid">
+    <div>
+      <div class="badge">Make reading fun (and trackable).</div>
+      <nav class="footerLinks" aria-label="Footer links">
+        <a href="./index.html">Home</a>
+        <a href="./explorer.html">Book Explorer</a>
+        <a href="./tracker.html">Progress Tracker</a>
+        <a href="./recommender.html">Recommender</a>
+        <a href="./flow.html">Reading Flow</a>
+        <a href="./feedback.html">Feedback</a>
+      </nav>
+      <p class="small">© <span id="year"></span> Readify</p>
+    </div>
+    <div class="card" style="padding:16px">
+      <h3 style="margin-bottom:6px">Newsletter</h3>
+      <form id="newsletterForm">
+        <label for="newsEmail">Email</label>
+        <input id="newsEmail" type="email" placeholder="name@example.com" required>
+        <div style="display:flex; gap:10px; margin-top:12px; align-items:center; flex-wrap:wrap">
+          <button class="btn primary" type="submit">Subscribe</button>
+          <button class="btn ghost" type="button" id="clearNews">Clear saved</button>
+          <span class="small" id="newsStatus" role="status"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</footer>
+
+</footer>
+<script src="./js/app.js" defer></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Newsletter localStorage
+  const KEY = "readify_newsletter_email";
+  const form = document.getElementById("newsletterForm");
+  const input = document.getElementById("newsEmail");
+  const status = document.getElementById("newsStatus");
+  const clearBtn = document.getElementById("clearNews");
+
+  const saved = localStorage.getItem(KEY);
+  if(saved){
+    input.value = saved;
+    status.textContent = "Saved ✔";
+  }
+
+  form?.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    localStorage.setItem(KEY, input.value.trim());
+    status.textContent = "Saved ✔";
+    toast("Newsletter email saved.");
+  });
+
+  clearBtn?.addEventListener("click", ()=>{
+    localStorage.removeItem(KEY);
+    input.value = "";
+    status.textContent = "Cleared.";
+    toast("Newsletter email cleared.");
+  });
+</script>
+
+
+<script src="./js/books.js" defer></script>
+<script src="./js/recommender.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Readify | Reading Flow</title>
+<meta name="description" content="Turn on cozy sounds and track completed books using localStorage.">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#8DA399">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./assets/logo_cheems.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/styles.css">
+
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header>
+  <div class="container navwrap">
+    <a class="brand" href="./index.html" aria-label="Readify Home">
+      <img src="./assets/logo_cheems.png" alt="Readify logo">
+      <span>Readify</span>
+    </a>
+
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="navlinks" id="navlinks" aria-label="Main navigation">
+      <a href="./index.html">Home</a>
+      <a href="./explorer.html">Book Explorer</a>
+      <a href="./tracker.html">Progress Tracker</a>
+      <a href="./recommender.html">Recommender</a>
+      <a href="./flow.html">Reading Flow</a>
+      <a href="./feedback.html">Feedback</a>
+</nav>
+  </div>
+</header>
+
+
+<main id="main" class="container page">
+  <section class="section">
+    <div class="card reveal" style="padding:18px">
+      <h1>Reading Flow</h1>
+      <p class="small">Turn on cozy sounds while you read. Mark books as completed. Everything is stored in localStorage.</p>
+
+      <div class="grid2" style="margin-top:10px">
+        <div class="card" style="padding:14px; background: rgba(255,255,255,.05)">
+          <h2>Cozy sounds</h2>
+          <p class="small">These are generated using the Web Audio API (so no heavy audio files). Toggle them on/off.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button class="btn" id="rainBtn" type="button">🌧️ Rain: Off</button>
+            <button class="btn" id="fireBtn" type="button">🔥 Fireplace: Off</button>
+            <button class="btn ghost" id="stopAll" type="button">Stop all</button>
+          </div>
+          <p class="small" style="margin-top:10px">Tip: some browsers require a click before audio can start.</p>
+        </div>
+
+        <div class="card" style="padding:14px; background: rgba(255,255,255,.05)">
+          <h2>Completed books</h2>
+          <p class="small">Mark books from your reading list as completed.</p>
+
+          <label for="pickComplete">Select a book</label>
+          <select id="pickComplete"></select>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px">
+            <button class="btn primary" id="markComplete" type="button">Mark completed</button>
+            <button class="btn danger" id="clearCompleted" type="button">Clear completed</button>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="small">Your completed list</div>
+            <ul id="completedList" style="margin:6px 0 0; padding-left:18px; line-height:1.8"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<footer class="footer">
+  <div class="container footerGrid">
+    <div>
+      <div class="badge"> Make reading fun (and trackable).</div>
+     <nav class="footerLinks" aria-label="Footer links">
+        <a href="./index.html">Home</a>
+        <a href="./explorer.html">Book Explorer</a>
+        <a href="./tracker.html">Progress Tracker</a>
+        <a href="./recommender.html">Recommender</a>
+        <a href="./flow.html">Reading Flow</a>
+        <a href="./feedback.html">Feedback</a>
+      </nav>
+      <p class="small">© <span id="year"></span> Readify</p>
+    </div>
+    <div class="card" style="padding:16px">
+      <h3 style="margin-bottom:6px">Newsletter</h3>
+   
+      <form id="newsletterForm">
+        <label for="newsEmail">Email</label>
+        <input id="newsEmail" type="email" placeholder="name@example.com" required>
+        <div style="display:flex; gap:10px; margin-top:12px; align-items:center; flex-wrap:wrap">
+          <button class="btn primary" type="submit">Subscribe</button>
+          <button class="btn ghost" type="button" id="clearNews">Clear saved</button>
+          <span class="small" id="newsStatus" role="status"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</footer>
+
+
+<script src="./js/app.js" defer></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Newsletter localStorage
+  const KEY = "readify_newsletter_email";
+  const form = document.getElementById("newsletterForm");
+  const input = document.getElementById("newsEmail");
+  const status = document.getElementById("newsStatus");
+  const clearBtn = document.getElementById("clearNews");
+
+  const saved = localStorage.getItem(KEY);
+  if(saved){
+    input.value = saved;
+    status.textContent = "Saved ✔";
+  }
+
+  form?.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    localStorage.setItem(KEY, input.value.trim());
+    status.textContent = "Saved ✔";
+    toast("Newsletter email saved.");
+  });
+
+  clearBtn?.addEventListener("click", ()=>{
+    localStorage.removeItem(KEY);
+    input.value = "";
+    status.textContent = "Cleared.";
+    toast("Newsletter email cleared.");
+  });
+</script>
+<script src="./js/flow.js" defer></script>
+
+</body>
+</html>

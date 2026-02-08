@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Readify | Book Explorer</title>
+<meta name="description" content="Browse books, search by title/author, and filter by genre. Open details in a modal.">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#8DA399">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./assets/logo_cheems.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/styles.css">
+
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header>
+  <div class="container navwrap">
+    <a class="brand" href="./index.html" aria-label="Readify Home">
+      <img src="./assets/logo_cheems.png" alt="Readify logo">
+      <span>Readify</span>
+    </a>
+
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="navlinks" id="navlinks" aria-label="Main navigation">
+      <a href="./index.html">Home</a>
+      <a href="./explorer.html">Book Explorer</a>
+      <a href="./tracker.html">Progress Tracker</a>
+      <a href="./recommender.html">Recommender</a>
+      <a href="./flow.html">Reading Flow</a>
+      <a href="./feedback.html">Feedback</a>
+</nav>
+  </div>
+</header>
+
+
+<main id="main" class="container page">
+  <section class="section">
+    <div class="card reveal" style="padding:18px">
+      <h1>Book Explorer</h1>
+      <p class="small">Search by title/author, filter by genre, then click a book card to view details.</p>
+
+      <div class="formRow" style="margin-top:10px">
+        <div>
+          <label for="search">Search</label>
+          <input id="search" placeholder="Try: dragon, chen, mystery..." autocomplete="off">
+        </div>
+        <div>
+          <label for="genre">Genre</label>
+          <select id="genre">
+            <option value="all">All</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px">
+        <button class="btn" id="clearFilters" type="button">Clear filters</button>
+        <span class="small" id="resultsCount" role="status"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div id="cards" class="cards reveal" aria-live="polite"></div>
+  </section>
+</main>
+
+<div class="modalBack" id="modalBack" role="dialog" aria-modal="true" aria-label="Book details">
+  <div class="modal card">
+    <div class="modalTop">
+      <div>
+        <h2 id="mTitle">Book title</h2>
+        <div class="small" id="mMeta"></div>
+      </div>
+      <button class="closeX" id="closeModal" aria-label="Close">✕</button>
+    </div>
+
+    <div class="grid2" style="margin-top:14px">
+      <div class="card" style="padding:14px; background: rgba(255,255,255,.05)">
+        <h3>Synopsis</h3>
+        <p id="mSynopsis"></p>
+        <h3 style="margin-top:14px">Series</h3>
+        <ul id="mSeries" style="line-height:1.85; margin:0; padding-left:18px"></ul>
+      </div>
+
+      <div class="card" style="padding:14px; background: rgba(255,255,255,.05)">
+        <h3>Ratings & Reviews</h3>
+        <table class="table" aria-label="Ratings and reviews table">
+          <thead>
+            <tr><th>Name</th><th>Rating</th><th>Comment</th></tr>
+          </thead>
+          <tbody id="mReviews"></tbody>
+        </table>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px">
+          <button class="btn primary" id="saveToList" type="button">Save to reading list</button>
+          <span class="small" id="saveStatus"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<footer class="footer">
+  <div class="container footerGrid">
+    <div>
+      <div class="badge">Make reading fun (and trackable).</div>
+      <nav class="footerLinks" aria-label="Footer links">
+        <a href="./index.html">Home</a>
+        <a href="./explorer.html">Book Explorer</a>
+        <a href="./tracker.html">Progress Tracker</a>
+        <a href="./recommender.html">Recommender</a>
+        <a href="./flow.html">Reading Flow</a>
+        <a href="./feedback.html">Feedback</a>
+      </nav>
+      <p class="small">© <span id="year"></span> Readify</p>
+    </div>
+    <div class="card" style="padding:16px">
+      <h3 style="margin-bottom:6px">Newsletter</h3>
+      <form id="newsletterForm">
+        <label for="newsEmail">Email</label>
+        <input id="newsEmail" type="email" placeholder="name@example.com" required>
+        <div style="display:flex; gap:10px; margin-top:12px; align-items:center; flex-wrap:wrap">
+          <button class="btn primary" type="submit">Subscribe</button>
+          <button class="btn ghost" type="button" id="clearNews">Clear saved</button>
+          <span class="small" id="newsStatus" role="status"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</footer>
+<script src="./js/app.js" defer></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Newsletter localStorage
+  const KEY = "readify_newsletter_email";
+  const form = document.getElementById("newsletterForm");
+  const input = document.getElementById("newsEmail");
+  const status = document.getElementById("newsStatus");
+  const clearBtn = document.getElementById("clearNews");
+
+  const saved = localStorage.getItem(KEY);
+  if(saved){
+    input.value = saved;
+    status.textContent = "Saved ✔";
+  }
+
+  form?.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    localStorage.setItem(KEY, input.value.trim());
+    status.textContent = "Saved ✔";
+    toast("Newsletter email saved.");
+  });
+
+  clearBtn?.addEventListener("click", ()=>{
+    localStorage.removeItem(KEY);
+    input.value = "";
+    status.textContent = "Cleared.";
+    toast("Newsletter email cleared.");
+  });
+</script>
+
+
+<script src="./js/books.js" defer></script>
+<script src="./js/explorer.js" defer></script>
+</body>
+</html>

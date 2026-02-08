@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Readify | Home</title>
+<meta name="description" content="Readify helps you explore books, track reading progress, and keep your reading flow cozy.">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#8DA399">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./assets/logo_cheems.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/styles.css">
+
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header>
+  <div class="container navwrap">
+    <a class="brand" href="./index.html" aria-label="Readify Home">
+      <img src="./assets/logo_cheems.png" alt="Readify logo">
+      <span>Readify</span>
+    </a>
+
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="navlinks" id="navlinks" aria-label="Main navigation">
+      <a href="./index.html">Home</a>
+      <a href="./explorer.html">Book Explorer</a>
+      <a href="./tracker.html">Progress Tracker</a>
+      <a href="./recommender.html">Recommender</a>
+      <a href="./flow.html">Reading Flow</a>
+      <a href="./feedback.html">Feedback</a>
+<button id="themeToggle" class="navThemeBtn" type="button">🌙</button>
+</nav>
+  </div>
+</header>
+
+
+<main id="main" class="container page">
+
+  
+  <section class="section homeDash">
+
+    <div class="homeTopGrid">
+      <div class="card reveal homeWelcome">
+        <div class="badge">📖 Reading, but make it fun.</div>
+        <h1 class="homeTitle">Welcome to Readify</h1>
+        <p class="homeLead">Explore books, track your progress, get random recommendations, and switch on cozy focus sounds when you read.</p>
+
+        <div class="homeCtas">
+          <a class="btn primary" href="./explorer.html">Explore books</a>
+          <a class="btn" href="./tracker.html">Track progress</a>
+          <a class="btn ghost" href="./recommender.html">Surprise me </a>
+        </div>
+      </div>
+
+      <div class="card reveal homeHeroMedia" aria-hidden="true">
+        <div class="heroArt heroArt--media">
+          <img id="heroImg" src="./assets/Cheems_hero_image.jpeg" alt="Cheems reading a book">
+        </div>
+      </div>
+    </div>
+
+    <div class="homeMidGrid">
+      <div class="card reveal quoteCard" aria-live="polite">
+        <div class="small">Quote of the moment</div>
+        <div id="quote" class="quote fadeIn">“Loading a good line…”</div>
+        <div id="quoteFrom" class="small" style="margin-top:10px"></div>
+      </div>
+
+      <div class="statGrid">
+        <div class="card reveal statCard">
+          <div class="statTop">
+            <span class="tag">Today</span>
+          </div>
+          <div class="statValue" id="authorDay">—</div>
+          <div class="small">Author of the Day</div>
+        </div>
+
+        <div class="card reveal statCard">
+          <div class="statTop">
+            <span class="tag">Saved</span>
+          </div>
+          <div class="statValue"><span id="savedCount">0</span></div>
+          <div class="small">In your reading list</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="homeBottomSingle">
+      <div class="card reveal homeSide">
+        <h2>Quick tips</h2>
+        <ul class="tipsList">
+          <li>Use <b>Recommender</b> when you don’t know what to read.</li>
+          <li>Save books in Explorer so your list grows over time.</li>
+          <li>Switch dark mode for night reading </li>
+        </ul>
+
+        <div class="sideCtas">
+          <a class="btn" href="./recommender.html">Pick a random book</a>
+          <a class="btn" href="./flow.html">Start reading flow</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+
+<footer class="footer">
+  <div class="container footerGrid">
+    <div>
+      <div class="badge"> Make reading fun (and trackable).</div>
+      <nav class="footerLinks" aria-label="Footer links">
+        <a href="./index.html">Home</a>
+        <a href="./explorer.html">Book Explorer</a>
+        <a href="./tracker.html">Progress Tracker</a>
+        <a href="./recommender.html">Recommender</a>
+        <a href="./flow.html">Reading Flow</a>
+        <a href="./feedback.html">Feedback</a>
+      </nav>
+
+      <p class="small">© <span id="year"></span> Readify</p>
+    </div>
+    <div class="card" style="padding:16px">
+      <h3 style="margin-bottom:6px">Newsletter</h3>
+      <form id="newsletterForm">
+        <label for="newsEmail">Email</label>
+        <input id="newsEmail" type="email" placeholder="name@example.com" required>
+        <div style="display:flex; gap:10px; margin-top:12px; align-items:center; flex-wrap:wrap">
+          <button class="btn primary" type="submit">Subscribe</button>
+          <button class="btn ghost" type="button" id="clearNews">Clear saved</button>
+          <span class="small" id="newsStatus" role="status"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</footer>
+<script src="./js/app.js" defer></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Newsletter localStorage
+  const KEY = "readify_newsletter_email";
+  const form = document.getElementById("newsletterForm");
+  const input = document.getElementById("newsEmail");
+  const status = document.getElementById("newsStatus");
+  const clearBtn = document.getElementById("clearNews");
+
+  const saved = localStorage.getItem(KEY);
+  if(saved){
+    input.value = saved;
+    status.textContent = "Saved ✔";
+  }
+
+  form?.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    localStorage.setItem(KEY, input.value.trim());
+    status.textContent = "Saved ✔";
+    toast("Newsletter email saved.");
+  });
+
+  clearBtn?.addEventListener("click", ()=>{
+    localStorage.removeItem(KEY);
+    input.value = "";
+    status.textContent = "Cleared.";
+    toast("Newsletter email cleared.");
+  });
+</script>
+
+
+<script src="./js/books.js" defer></script>
+<script>
+  const quotes = [
+    { t: "“A room without books is like a body without a soul.”", f:"Marcus Tullius Cicero" },
+    { t: "“Today a reader, tomorrow a leader.”", f:"— Margaret Fuller" },
+    { t: "“Books are a uniquely portable magic.”", f:"— Stephen King" },
+    { t: "“If you don’t like to read, you haven’t found the right book.”", f:"— J.K. Rowling" },
+    { t: "“So many books, so little time.”", f:"— Frank Zappa" },
+  ];
+  let qi = 0;
+  function rotateQuote(){
+    const q = quotes[qi % quotes.length];
+    const el = document.getElementById("quote");
+    const from = document.getElementById("quoteFrom");
+    el.classList.remove("fadeIn"); void el.offsetWidth; el.classList.add("fadeIn");
+    el.textContent = q.t;
+    from.textContent = q.f;
+    qi++;
+  }
+  rotateQuote();
+  setInterval(rotateQuote, 5000);
+
+  // Author of the Day 
+  const authors = [
+    "Mira Halley","S. Jayasinghe","L. Chen","A. K. Perera",
+    "Jonah Reed","Priya Sen","H. Nomura","E. Hart","R. Alvarez"
+  ];
+  const today = new Date();
+  const dayIndex = Math.floor((today.getTime() / (1000*60*60*24))) % authors.length;
+  document.getElementById("authorDay").textContent = authors[dayIndex];
+
+  // Saved list count
+  const list = JSON.parse(localStorage.getItem("readify_reading_list") || "[]");
+  document.getElementById("savedCount").textContent = list.length;
+</script>
+</body>
+</html>

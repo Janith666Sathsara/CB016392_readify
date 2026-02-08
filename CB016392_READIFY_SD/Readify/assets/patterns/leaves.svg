@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220">
+  <g fill="none" stroke="rgba(86, 181, 138, 0.29)" stroke-width="1">
+
+    <path d="M40 40c-18 20-18 42 0 62 18-20 18-42 0-62z"
+          transform="rotate(-20 40 40)"/>
+
+    <path d="M140 50c-16 18-16 38 0 56 16-18 16-38 0-56z"
+          transform="rotate(35 140 50)"/>
+
+    <path d="M70 150c-20 22-20 46 0 68 20-22 20-46 0-68z"
+          transform="rotate(110 70 150)"/>
+
+    <path d="M160 160c-14 16-14 32 0 48 14-16 14-32 0-48z"
+          transform="rotate(-75 160 160)"/>
+
+  </g>
+</svg>
